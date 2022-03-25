@@ -92,10 +92,90 @@ for(i <- 0 to s1){
        1
     }
   }
-    println(factorial(10))
-
-
+  println(factorial(10))
   println(factorial(100))
   println(factorial(10000)) // Does it work?
   // HW5]]
+
+  // [[HW6: (5 pts) Complete the factorial function with tail recursion
+  def factHelper(n: Int, factPartial: BigInt): BigInt ={
+    if (n < 1){
+      factPartial
+    }else{
+      factHelper((n-1), (n * factPartial))
+    }
+  }
+
+
+
+  def tailFactorial(n: Int): BigInt = {
+    factHelper(n, 1)
+
+  }
+
+  println(tailFactorial(10000)) // much faster and no stack overflow
+  // HW6]]
+
+  // [[HW7: (10 pts) Complete the function composition
+  def h[A, B, C](f: B => C, g: A => B): A => C ={
+
+  }
+
+
+  val add2 = (x: Int) => x + 2
+  val times3 = (x: Int) => x * 3
+  println(h(add2, times3)(4))
+
+  //HW7]
+
+  // [[HW8: (10 pts) Complete the third_list function
+  // it should return the third element of the list
+  def third_list[A](ls: List[A]): A ={
+    ls(3)
+  }
+
+
+  val l1 = List(1, 2, 3, 4)
+  println(third_list(l1))
+  println(third_list(List(1,2,(3,4,5), 6, 7)))
+  // HW8]]
+
+  // [[HW9: (10 pts) Complete the nth_list function
+  // this function returns the nth element in the list
+  def nth_list[A](n: Int, ls: List[A]): A = {
+    ls(n)
+  }
+  println(nth_list(2, l1))
+  println(nth_list(3, List(1,2,(3,4,5), 6, 7)))
+  // HW9]]
+
+  // [[HW10: (10 pts) Complete the following function
+  def applyall[A, B](fun:A => B, l:List[A]): List[B] ={
+    for(i <- 0 to l.length){
+      l(i) = fun(l(i))
+    }
+  }
+
+
+
+  def cube(x: Int): Int = x * x * x
+
+  val l1 = List(2,3,4)
+  println(applyall(cube, l1))
+  println(applyall((x: Int) => x * x * x, List(3, 4, 5)))
+  // HW10]]
+  // [[HW11: (10 pts) Find the length of a list recursively
+  def length[A](l: List[A]): Int = {
+    if(l != null) {
+      1 + length(l.splitAt(1)._2)
+    }else
+      1
+
+  }
+
+
+    println(length(l1))
+  }
+
+  println(length(List(1,2,(3,4,5), 6, 7)))
 }
