@@ -1,4 +1,5 @@
 import scala.annotation.tailrec
+import scala.collection.immutable.Nil.:::
 
 object ex extends App {
   // checking for member
@@ -49,15 +50,8 @@ for(i <- 0 to s1){
 
   // [[HW3: (10 pts) Complete the append function
   def append[A](l1: List[A], l2: List[A]): List[A] = {
-    var newSize = l1.length + l2.length
-    var newList = l1
-    for (i <- 0 to l2.length){
-      var ind = i + l2.length
-   //  newList(ind) = l2(i)
+    l1 ::: l2
     }
-
-    newList
-  }
   println(append(l1, l6))
   println(append(l5, l1))
 
@@ -117,14 +111,14 @@ for(i <- 0 to s1){
   // HW6]]
 
   // [[HW7: (10 pts) Complete the function composition
-  def h[A, B, C](f: B => C, g: A => B): A => C ={
-
+  def h[A, B, C](f: B => C, g: A => B, x : A): C ={
+    f(g(x))
   }
 
 
   val add2 = (x: Int) => x + 2
   val times3 = (x: Int) => x * 3
-  println(h(add2, times3)(4))
+  println(h(add2, times3, 4))
 
   //HW7]
 
@@ -151,11 +145,12 @@ for(i <- 0 to s1){
 
   // [[HW10: (10 pts) Complete the following function
   def applyall[A, B](fun:A => B, l:List[A]): List[B] ={
-    for(i <- 0 to l.length){
-      l(i) = fun(l(i))
+    var newList: List[B] = new List[B]
+    for(i <- 0 to length(l)){
+      newList = newList ::: fun(l(i))
     }
+    newList
   }
-
 
 
   def cube(x: Int): Int = x * x * x
@@ -167,15 +162,13 @@ for(i <- 0 to s1){
   // [[HW11: (10 pts) Find the length of a list recursively
   def length[A](l: List[A]): Int = {
     if(l != null) {
-      1 + length(l.splitAt(1)._2)
+      1 + length(l.tail)
     }else
       1
 
   }
-
-
     println(length(l1))
+  println(length(List(1,2,(3,4,5), 6, 7)))
   }
 
-  println(length(List(1,2,(3,4,5), 6, 7)))
-}
+
