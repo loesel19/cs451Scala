@@ -1,9 +1,18 @@
 import scala.annotation.tailrec
 
+/**
+ * Program name : firstScala
+ * Program Author : Andrew Loesel
+ * last edited on: 3/29/2022
+ * purpose : This contains an object called ex, which has functions that perform several assorted tasks
+ *           using functional programming concepts like recursion, higher order functions, etc.
+ */
 object ex extends App {
   // checking for member
   // [[HW1: (10 pts) complete the member function
   def member(a: Int, b: List[Int]): Boolean = {
+    //check if b's first element and a are equal, if not we pass the tail of b (car(b)) and a
+    //to a recursive function call. If we get to the point that b is Nil then we never found a match
     if (b != Nil){
       if (b.head == a){
         true
@@ -26,7 +35,9 @@ object ex extends App {
   val l5 = List('A', 'C', 'D')
 
   def equalsimp(a: List[Char], b: List[Char]): Boolean = {
-    //see if the inputs are null
+    //we first check to see if the function has either been passed 2 empty lists, this will always be true due to the
+    //recursive call structure. else we want to see if the first element in a and b are equal, if thats the case we
+    //then pass the cdr of a and b recursively to this function, else we return false since 2 elements were not equal
     if(a == Nil  && b == Nil){
       true
     }else{
@@ -45,6 +56,7 @@ object ex extends App {
 
   // [[HW3: (10 pts) Complete the append function
   def append[A](l1: List[A], l2: List[A]): List[A] = {
+    //we can use the built in ::: operator to combine the two lists
     l1 ::: l2
   }
   println(append(l1, l6))
@@ -57,16 +69,13 @@ object ex extends App {
   // [[HW4: (10 pts) Complete the quadratic_roots function
   // hint: for square root, you can call math.sqrt() function
   def quadratic_roots(a: Int, b: Int, c: Int) = {
-    val radicand = ((b*b) - (4 * a * c))
-    var root_part : Double = 0
-    if (radicand < 0){
-      root_part = math.sqrt(-1 * ((b*b) - (4 * a * c)))
-    }else{
+    //just approach with logic the same as the normal quadratic formula
+
       val root_part = math.sqrt((b*b) - (4 * a * c))
-    }
+
     val minus_b  : Double = (-1 * b).asInstanceOf[Double]
 
-    List((minus_b + root_part), (minus_b - root_part))
+    List((minus_b + root_part)/2.0, (minus_b - root_part)/2.0)
 
   }
 
@@ -107,6 +116,7 @@ object ex extends App {
 
   // [[HW7: (10 pts) Complete the function composition
   def h[A, B, C](f: B => C, g: A => B): A => C ={
+    //compose is built into scala
     f compose g
   }
 
@@ -141,10 +151,14 @@ object ex extends App {
   // HW9]]
 
   // [[HW10: (10 pts) Complete the following function
-  //todo do this one
   def applyall[A, B](fun:A => B, l:List[A]): List[B] ={
-    var lol: List[B] = List()
-    lol
+    //we can just use the map function to map the function to the input list
+    //l.map(fun)        but thats no fun
+    if(l != Nil){
+      append(List(fun(l.head)), applyall(fun, l.tail))
+    }else{
+      Nil
+    }
   }
 
 
@@ -157,11 +171,14 @@ object ex extends App {
   // HW10]]
   // [[HW11: (10 pts) Find the length of a list recursively
   def length[A](l: List[A]): Int = {
-    if(l != Nil) {
+    //we recursively call and increment by 1 everytime this function is passed a non nil list. we must also check that
+    //the list isn't null meaning that it was never instanciated
+    if(l == null){
+     0
+    }else if(l != Nil) {
       1 + length(l.tail)
     }else
       0
-
   }
 
 
