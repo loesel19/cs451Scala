@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException
 
 object hw5 extends App{
   abstract class IntList{
@@ -6,21 +7,7 @@ object hw5 extends App{
     def isEmpty: Boolean
     def add(elem: Int): IntList
     def isEqual(list: IntList): Boolean
-    def createList(num: Int): IntList = {
-      var newList = new IntList {
-        override def head: Int = num % 10
-
-        override def tail: IntList =
-
-        override def isEmpty: Boolean = false
-
-        override def add(elem: Int): IntList = {
-          elem + head + tail
-        }
-
-        override def isEqual(list: IntList): Boolean = ???
-      }
-    }
+    def createList(num: Int): IntList
 
   }
   case object Empty extends IntList{
@@ -28,8 +15,15 @@ object hw5 extends App{
     def tail: IntList = throw new NoSuchElementException
     def isEmpty: Boolean = true
     def add(elem: Int): IntList = new Cons(elem, Empty)
-    override def toString: String = ???
-    def isEqual(list: IntList): Boolean = ???
+    override def toString: String = "Empty"
+    def isEqual(list: IntList): Boolean = {
+      if (list.head.isInstanceOf[Nothing]){
+        true
+      }else
+        false
+    }
+
+    override def createList(num: Int): IntList = {}
   }
   class Cons(h: Int, t: IntList) extends IntList {
     def head: Int = h
@@ -46,6 +40,10 @@ object hw5 extends App{
     str
     }
     def isEqual(list: IntList): Boolean = ???
+
+    override def createList(num: Int): IntList = {
+
+    }
   }
   val list: IntList = new Cons(1, Empty)
   println(list)
