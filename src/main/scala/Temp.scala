@@ -15,15 +15,15 @@ object hw5 extends App{
     def tail: IntList = throw new NoSuchElementException
     def isEmpty: Boolean = true
     def add(elem: Int): IntList = new Cons(elem, Empty)
-    override def toString: String = "Empty"
+    override def toString: String = "[]"
     def isEqual(list: IntList): Boolean = {
-      if (list.head.isInstanceOf[Nothing]){
+      if (list.equals(this)){
         true
       }else
         false
     }
 
-    override def createList(num: Int): IntList = {}
+    override def createList(num: Int): IntList = ???
   }
   class Cons(h: Int, t: IntList) extends IntList {
     def head: Int = h
@@ -31,18 +31,30 @@ object hw5 extends App{
     def isEmpty: Boolean = false
     def add(elem: Int): IntList = new Cons(elem, this)
     override def toString: String = {
-      var str: String = "[" + this.head + " "
+      var str: String = "[" + this.head
       var tempTail:IntList = this.tail
-      while(tempTail != Nil){
-        str = str + tempTail.head + " "
+      while(tempTail != Empty){
+        str = str + " " + tempTail.head
         tempTail = tempTail.tail
       }
-    str
+    str + "]"
     }
-    def isEqual(list: IntList): Boolean = ???
+    def isEqual(list: IntList): Boolean = {
+      if(this.isEmpty && list.isEmpty){
+        true
+      }else if(this.isEmpty || list.isEmpty) {
+      false
+      }else{
+        if(this.head == list.head){
+          this.tail.isEqual(list.tail)
+        }else{
+          false
+        }
+      }
+    }
 
     override def createList(num: Int): IntList = {
-
+      new Cons(num, this)
     }
   }
   val list: IntList = new Cons(1, Empty)
