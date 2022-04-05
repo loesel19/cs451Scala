@@ -29,7 +29,7 @@ object hw5 extends App{
     def head: Int = h
     def tail: IntList = t
     def isEmpty: Boolean = false
-    def add(elem: Int): IntList = new Cons(elem, this)
+    def add(elem: Int): IntList = {createList(elem)}
     override def toString: String = {
       var str: String = "[" + this.head
       var tempTail:IntList = this.tail
@@ -57,6 +57,34 @@ object hw5 extends App{
       new Cons(num, this)
     }
   }
+  def addInt(l1: IntList, l2: IntList): IntList = {
+    /**
+     * this method will recursively generate an IntList with no carry over addition
+     */
+    if (l1.isEmpty && l2.isEmpty) {
+      Empty
+    } else {
+      if(!l1.tail.isEmpty && !l2.tail.isEmpty){
+        //if we check the values here we can see if we need to add 1 to the head for carry over
+        if(l1.tail.head + l2.tail.head < 9) {
+          new Cons(l1.head + l2.head, addInt(l1.tail, l2.tail))
+        }else{
+          //TODO figure out how to subract 10 from the tail here
+          var x = new Cons(l1.head + l2.head + 1, addInt(l1.tail, l2.tail))
+
+          x
+        }
+      }else{
+        new Cons(l1.head + l2.head, addInt(l1.tail, l2.tail))
+      }
+
+    }
+    //todo just pass full result of this to new function, which first checks if first elem (head) is > 9. if so add a new
+    //todo head with a 1, and then go through the rest of the list, and create a new list side by side, but subtract 10
+    //todo from any of the original list elements that are > 9 when we add them to the new list.
+
+  }
+
   val list: IntList = new Cons(1, Empty)
   println(list)
 }
