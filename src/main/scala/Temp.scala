@@ -1,4 +1,5 @@
 import java.util.NoSuchElementException
+import scala.runtime.Nothing$
 
 object hw5 extends App{
   abstract class IntList{
@@ -58,6 +59,27 @@ object hw5 extends App{
     }
   }
   def addInt(l1: IntList, l2: IntList): IntList = {
+    //lets get the simple addition list
+    var overFlowList = simpleAdd(l1, l2)
+    //now lets see if its head is > 9
+    if(overFlowList.head > 9){
+      new Cons(1, new Cons(overFlowList.head - 10, minusTen(overFlowList.tail)))
+    }else{
+      minusTen(overFlowList)
+    }
+
+  }
+
+  def minusTen(overFlowList: IntList): IntList = {
+    if (!overFlowList.isEmpty){
+      if (overFlowList.head > 10){
+        new Cons(overFlowList.head - 10, minusTen(overFlowList.tail))
+      }else
+        new Cons(overFlowList.head, minusTen(overFlowList.tail))
+    }else
+      Empty
+  }
+  def simpleAdd(l1: IntList, l2: IntList): IntList = {
     /**
      * this method will recursively generate an IntList with no carry over addition
      */
@@ -67,15 +89,15 @@ object hw5 extends App{
       if(!l1.tail.isEmpty && !l2.tail.isEmpty){
         //if we check the values here we can see if we need to add 1 to the head for carry over
         if(l1.tail.head + l2.tail.head < 9) {
-          new Cons(l1.head + l2.head, addInt(l1.tail, l2.tail))
+          new Cons(l1.head + l2.head, simpleAdd(l1.tail, l2.tail))
         }else{
           //TODO figure out how to subract 10 from the tail here
-          var x = new Cons(l1.head + l2.head + 1, addInt(l1.tail, l2.tail))
+          var x = new Cons(l1.head + l2.head + 1, simpleAdd(l1.tail, l2.tail))
 
           x
         }
       }else{
-        new Cons(l1.head + l2.head, addInt(l1.tail, l2.tail))
+        new Cons(l1.head + l2.head, simpleAdd(l1.tail, l2.tail))
       }
 
     }
@@ -85,6 +107,4 @@ object hw5 extends App{
 
   }
 
-  val list: IntList = new Cons(1, Empty)
-  println(list)
 }
