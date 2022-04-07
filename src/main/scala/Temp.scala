@@ -59,6 +59,24 @@ object hw5 extends App{
       new Cons(num, this)
     }
   }
+  def createList(num: Int): IntList = {
+    val revList = reversedList(num)
+    properList(revList)
+  }
+  def properList(reversed: IntList): IntList = {
+    if (reversed.isEmpty){
+      Empty
+    }else{
+      new Cons(getTailVal(reversed), properList(removeTail(reversed)))
+    }
+  }
+  def reversedList(num: Int): IntList = {
+    if (num == 0){
+      Empty
+    }else{
+      new Cons(num % 10, createList(num/10))
+    }
+  }
   def getLength(l: IntList): Int = {
     if(!l.isEmpty){
       1 + getLength(l.tail)
@@ -119,9 +137,14 @@ object hw5 extends App{
     }
 
   }
-//  def intValue(list: IntList): Int = {
-//
-//  }
+  def intValue(list: IntList): Int = {
+    if(list.isEmpty){
+      0
+    }else{
+      getTailVal(list) + (10 * intValue(removeTail(list)))
+    }
+  }
+
   def addIntQuestion4(l1: IntList, l2: IntList): IntList = {
     /**
      * this will add lists together that have the same length
@@ -139,7 +162,7 @@ object hw5 extends App{
 
   def minusTen(overFlowList: IntList): IntList = {
     if (!overFlowList.isEmpty){
-      if (overFlowList.head > 10){
+      if (overFlowList.head > 9){
         new Cons(overFlowList.head - 10, minusTen(overFlowList.tail))
       }else
         new Cons(overFlowList.head, minusTen(overFlowList.tail))
