@@ -1,4 +1,5 @@
 import java.util.NoSuchElementException
+import javax.swing.event.InternalFrameListener
 import scala.runtime.Nothing$
 
 object hw5 extends App{
@@ -58,7 +59,73 @@ object hw5 extends App{
       new Cons(num, this)
     }
   }
+  def getLength(l: IntList): Int = {
+    if(!l.isEmpty){
+      1 + getLength(l.tail)
+    }else
+      0
+  }
+  def getTailVal(l: IntList): Int = {
+    if (l.tail.isEmpty){
+      l.head
+    }else{
+      getTailVal(l.tail)
+    }
+  }
+  def removeTail(l: IntList): IntList = {
+    if(l.tail.isEmpty){
+      Empty
+    }else{
+      new Cons(l.head, removeTail(l.tail))
+    }
+  }
   def addInt(l1: IntList, l2: IntList): IntList = {
+    //again like question 4 we will get a list that has overflow in it, but only needs
+    //10 subtracted from the overflow elements
+    val overFlowList: IntList = addIntQuestion5(l1, l2)
+    //like question 4 we have to see if the head is > 9 so we can add a new digit
+    if(overFlowList.head > 9){
+      new Cons(1, new Cons(overFlowList.head - 10, minusTen(overFlowList.tail)))
+    }else{
+      minusTen(overFlowList)
+    }
+
+  }
+  def addIntQuestion5(l1: IntList, l2: IntList): IntList = {
+    /**
+     * this is going to be the addInt from question 5, allowing different size lists.
+     * We could just use the intValue function to get the values of the 2 lists as actual integers
+     * and then add them using the languages arithmetic, and convert that to an intList. However,
+     * I am sure that will lose points...
+     */
+    val length1: Int = getLength(l1) //use a recursive method to get lengths
+    val length2: Int = getLength(l2)
+    if (length1 == length2){
+      simpleAdd(l1, l2)
+    }else{
+      if (length1 > length2){
+        if (addIntQuestion5(l1.tail, l2).head > 9){
+          new Cons(l1.head + 1, addIntQuestion5(l1.tail, l2))
+        }else {
+          new Cons(l1.head, addIntQuestion5(l1.tail, l2))
+        }
+      }else{
+        if(addIntQuestion5(l1, l2.tail).head > 9){
+          new Cons(l2.head + 1, addIntQuestion5(l1, l2.tail))
+        }else {
+          new Cons(l2.head, addIntQuestion5(l1, l2.tail))
+        }
+      }
+    }
+
+  }
+//  def intValue(list: IntList): Int = {
+//
+//  }
+  def addIntQuestion4(l1: IntList, l2: IntList): IntList = {
+    /**
+     * this will add lists together that have the same length
+     */
     //lets get the simple addition list
     var overFlowList = simpleAdd(l1, l2)
     //now lets see if its head is > 9
@@ -81,7 +148,9 @@ object hw5 extends App{
   }
   def simpleAdd(l1: IntList, l2: IntList): IntList = {
     /**
-     * this method will recursively generate an IntList with no carry over addition
+     * this method will recursively generate an IntList with carry over addition, however
+     * another method, minusTen is needed as well as some logic in addInt to make this work
+     * properly
      */
     if (l1.isEmpty && l2.isEmpty) {
       Empty
@@ -91,9 +160,7 @@ object hw5 extends App{
         if(l1.tail.head + l2.tail.head < 9) {
           new Cons(l1.head + l2.head, simpleAdd(l1.tail, l2.tail))
         }else{
-          //TODO figure out how to subract 10 from the tail here
           var x = new Cons(l1.head + l2.head + 1, simpleAdd(l1.tail, l2.tail))
-
           x
         }
       }else{
@@ -101,10 +168,21 @@ object hw5 extends App{
       }
 
     }
-    //todo just pass full result of this to new function, which first checks if first elem (head) is > 9. if so add a new
-    //todo head with a 1, and then go through the rest of the list, and create a new list side by side, but subtract 10
-    //todo from any of the original list elements that are > 9 when we add them to the new list.
+    //todoxx just pass full result of this to new function, which first checks if first elem (head) is > 9. if so add a new
+    //todoxx head with a 1, and then go through the rest of the list, and create a new list side by side, but subtract 10
+    //todoxx from any of the original list elements that are > 9 when we add them to the new list.
 
+  }
+  def addIntQuestion3(l1: IntList, l2: IntList):IntList = {
+    /**
+     * this method will recursively generate an IntList with no carry over addition
+     */
+    if (l1.isEmpty && l2.isEmpty) {
+      Empty
+    } else {
+        new Cons(l1.head + l2.head, simpleAdd(l1.tail, l2.tail))
+
+    }
   }
 
 }
