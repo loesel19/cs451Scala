@@ -1,8 +1,58 @@
+import hw5.{Cons, Empty}
+
 import java.util.NoSuchElementException
 import javax.swing.event.InternalFrameListener
 import scala.runtime.Nothing$
 
 object hw5 extends App{
+     override def main(args: Array[String]): Unit ={
+      println("*******Q1*******")
+       var list1 = new Cons(1, new Cons(2, Empty))
+       println(list1) // Should print [1 2]
+       var listE = Empty
+       println(listE)
+
+       println("*******Q3*******")
+       list1 = new Cons(3, new Cons(4, new Cons(5, Empty)))
+        var list2 = new Cons(1, new Cons(2, new Cons(3, Empty)))
+       println(addIntQuestion3(list1, list2)) //simpleAdd is the one for question 2
+
+       println("*******Q4*******")
+       val list12 = new Cons(8, new Cons(7, new Cons(2, Empty)))
+       val list13 = new Cons(8, new Cons(8, new Cons(2, Empty)))
+       val list14 = new Cons(8, new Cons(7, new Cons(9, Empty)))
+       println(addIntQuestion4(list1, list12))
+       println(addIntQuestion4(list13, list2))
+       println(addIntQuestion4(list14, list1))
+
+       println("*******Q5*******")
+       val list3 = new Cons(1, new Cons(2, new Cons(3, new Cons(4, Empty))))
+       println(addInt(list1, list3))
+       println(addInt(list3, list2))
+       println(addInt(list3, list14))
+
+       println("*******Q6*******")
+       println(intValue(list3))
+
+       println("*******Q7*******")
+       val list4 = createList(321)
+       println(list4)
+
+       println("*******Q8*******")
+       println(subInt(list1, list2))
+       val list5:IntList = createList(657)
+       val list6 = createList(334)
+       val list7 = subInt(list5, list6)
+       println(list7)
+
+       println("*******Q9*******")
+       var l1 = createList(523)
+       var l2 = createList(3251)
+       var l3 = subInt(l1, l2)
+       var l4 = subInt(l2, l1)
+       println(intValue(l3)) // should print negative number –[1 5 2 3]
+       println(intValue(l4))
+    }
   abstract class IntList{
     def head: Int
     def tail: IntList
@@ -32,6 +82,10 @@ object hw5 extends App{
     def tail: IntList = t
     def isEmpty: Boolean = false
     def add(elem: Int): IntList = {createList(elem)}
+
+    /**
+     * defined methods
+     */
     override def toString: String = {
       //quick patch to add in negative number implementation
       var str: String = ""
@@ -61,15 +115,13 @@ object hw5 extends App{
       }
     }
 
-    override def createList(num: Int): IntList = {
-      new Cons(num, this)
-    }
+    override def createList(num: Int): IntList = ???
   }
-  def subList(l1: IntList, l2: IntList): IntList = {
+  def subInt(l1: IntList, l2: IntList): IntList = {
     val minusList = getMinuses(l1, l2)
     //we can do the get value on this minus list, and it should work
     val minusVal = intValue(minusList)
-   //we can just call createList and with how it is implemented the if our value is negative
+    //we can just call createList and with how it is implemented the if our value is negative
     //the lists head element will be negative so we can just add a quick fix to the toString method
     //and we will be all set
     createList(minusVal)
@@ -233,9 +285,8 @@ object hw5 extends App{
     if (l1.isEmpty && l2.isEmpty) {
       Empty
     } else {
-        new Cons(l1.head + l2.head, simpleAdd(l1.tail, l2.tail))
+      new Cons(l1.head + l2.head, simpleAdd(l1.tail, l2.tail))
 
     }
   }
-
 }
