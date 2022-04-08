@@ -33,8 +33,14 @@ object hw5 extends App{
     def isEmpty: Boolean = false
     def add(elem: Int): IntList = {createList(elem)}
     override def toString: String = {
-      var str: String = "[" + this.head
-      var tempTail:IntList = this.tail
+      //quick patch to add in negative number implementation
+      var str: String = ""
+      var tempTail = this.tail
+      if (this.head > 0) {
+         str = "[" + this.head
+      }else{
+         str = "-[" + (-1 * this.head)
+      }
       while(tempTail != Empty){
         str = str + " " + tempTail.head
         tempTail = tempTail.tail
@@ -59,6 +65,30 @@ object hw5 extends App{
       new Cons(num, this)
     }
   }
+  def subList(l1: IntList, l2: IntList): IntList = {
+    val minusList = getMinuses(l1, l2)
+    //we can do the get value on this minus list, and it should work
+    val minusVal = intValue(minusList)
+   //we can just call createList and with how it is implemented the if our value is negative
+    //the lists head element will be negative so we can just add a quick fix to the toString method
+    //and we will be all set
+    createList(minusVal)
+  }
+  def getMinuses(l1: IntList, l2: IntList): IntList = {
+    val length1 = getLength(l1)
+    val length2 = getLength(l2)
+    if (length1 == length2){
+      if(l1.isEmpty){
+        Empty
+      }else {
+        new Cons((l1.head - l2.head), getMinuses(l1.tail, l2.tail))
+      }
+    }else if(length1 > length2){
+      new Cons(l1.head, getMinuses(l1.tail, l2))
+    }else{
+      new Cons(-1 * l2.head, getMinuses(l1, l2.tail))
+    }
+  }
   def createList(num: Int): IntList = {
     val revList = reversedList(num)
     properList(revList)
@@ -74,7 +104,7 @@ object hw5 extends App{
     if (num == 0){
       Empty
     }else{
-      new Cons(num % 10, createList(num/10))
+      new Cons(num % 10, reversedList(num/10))
     }
   }
   def getLength(l: IntList): Int = {
